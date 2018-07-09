@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:content="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+
+>
+    <!--扫描bean注解 -->
+    <content:component-scan base-package="cn.yiban" />
+    <!--扫描事务管理注解 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="user" class="cn.yiban.API.User"/>
+
+    <bean id="enroll" class="cn.yiban.DAO.Enroll_jdbcTemplate"/>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <constructor-arg name="url" value="jdbc:sqlserver://localhost:1433;DatabaseName=Enroll"/>
+        <constructor-arg name="username" value="zheng"/>
+        <constructor-arg name="password" value="zws19970423"/>
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+<!--
+拦截http失败，原因蒙蔽
+    <aop:config>
+        <aop:pointcut  expression="execution(public * cn.yiban.service.authServlet.*(..))" id="pointcut1"/>
+        <aop:aspect ref="log">
+            <aop:before method = "began" pointcut-ref="pointcut1"/>
+            <aop:after method = "end" pointcut-ref="pointcut1"/>
+        </aop:aspect>
+    </aop:config>
+    -->
+</beans>
